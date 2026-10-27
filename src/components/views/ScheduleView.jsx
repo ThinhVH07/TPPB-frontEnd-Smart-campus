@@ -435,26 +435,26 @@ export function ScheduleView() {
       {activeSubTab === 'requests' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="p-4 bg-gradient-to-br from-white to-amber-50/40">
-              <p className="text-xs font-bold text-slate-500">Đang chờ xét duyệt</p>
-              <p className="text-2xl font-black text-amber-700 mt-1">{pendingRequestsCount}</p>
-              <span className="text-[10px] text-amber-600">Cần Admin phê duyệt</span>
+            <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
+              <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Đang chờ xét duyệt</p>
+              <p className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-1">{pendingRequestsCount}</p>
+              <span className="text-[10px] text-amber-600 dark:text-amber-400">Cần Admin phê duyệt</span>
             </Card>
 
-            <Card className="p-4 bg-gradient-to-br from-white to-emerald-50/40">
-              <p className="text-xs font-bold text-slate-500">Đã chấp thuận</p>
-              <p className="text-2xl font-black text-emerald-700 mt-1">
+            <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
+              <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Đã chấp thuận</p>
+              <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
                 {requests.filter(r => r.trang_thai === 'DaDuyet').length}
               </p>
-              <span className="text-[10px] text-emerald-600">Đã tự động chuyển vào LichPhong</span>
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400">Đã tự động chuyển vào LichPhong</span>
             </Card>
 
-            <Card className="p-4 bg-gradient-to-br from-white to-slate-50">
-              <p className="text-xs font-bold text-slate-500">Từ chối / Đã hủy</p>
-              <p className="text-2xl font-black text-slate-700 mt-1">
+            <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
+              <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Từ chối / Đã hủy</p>
+              <p className="text-2xl font-black text-slate-700 dark:text-slate-300 mt-1">
                 {requests.filter(r => r.trang_thai === 'TuChoi').length}
               </p>
-              <span className="text-[10px] text-slate-500">Không đủ điều kiện</span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400">Không đủ điều kiện</span>
             </Card>
           </div>
 

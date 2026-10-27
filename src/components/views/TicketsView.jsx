@@ -161,40 +161,40 @@ export function TicketsView() {
 
       {/* 2. KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <Card className="p-4 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
             <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Tổng số phiếu</p>
-            <AlertTriangle className="w-4 h-4 text-slate-600" />
+            <AlertTriangle className="w-4 h-4 text-slate-600 dark:text-slate-400" />
           </div>
-          <p className="text-2xl font-black text-slate-900 mt-2">{totalReports}</p>
-          <span className="text-[10px] text-slate-400">Ghi nhận toàn trường</span>
+          <p className="text-2xl font-black text-slate-900 dark:text-white mt-2">{totalReports}</p>
+          <span className="text-[10px] text-slate-400 dark:text-slate-500">Ghi nhận toàn trường</span>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-white to-amber-50/40">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-slate-500">Mới tiếp nhận</p>
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Mới tiếp nhận</p>
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
           </div>
-          <p className="text-2xl font-black text-amber-700 mt-2">{moiCount}</p>
-          <span className="text-[10px] text-amber-600 font-medium">Chờ phân công kỹ thuật</span>
+          <p className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-2">{moiCount}</p>
+          <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">Chờ phân công kỹ thuật</span>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-white to-blue-50/40">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-slate-500">Đang sửa chữa</p>
-            <Wrench className="w-4 h-4 text-blue-600" />
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Đang sửa chữa</p>
+            <Wrench className="w-4 h-4 text-blue-600 dark:text-blue-400" />
           </div>
-          <p className="text-2xl font-black text-blue-700 mt-2">{inProgressCount}</p>
-          <span className="text-[10px] text-blue-600 font-medium">Kỹ thuật viên đang xử lý</span>
+          <p className="text-2xl font-black text-blue-600 dark:text-blue-400 mt-2">{inProgressCount}</p>
+          <span className="text-[10px] text-blue-600 dark:text-blue-400 font-medium">Kỹ thuật viên đang xử lý</span>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-white to-emerald-50/40">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-slate-500">Đã giải quyết xong</p>
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Đã giải quyết xong</p>
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           </div>
-          <p className="text-2xl font-black text-emerald-700 mt-2">{resolvedCount}</p>
-          <span className="text-[10px] text-emerald-600 font-medium">Thiết bị hoạt động lại</span>
+          <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-2">{resolvedCount}</p>
+          <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Thiết bị hoạt động lại</span>
         </Card>
       </div>
 

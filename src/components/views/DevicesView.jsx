@@ -214,49 +214,49 @@ export function DevicesView({ onNavigateToTickets }) {
 
       {/* 2. Key Metrics Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        <Card className="p-4 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-slate-500">Tổng thiết bị</p>
-            <Monitor className="w-4 h-4 text-blue-600" />
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Tổng thiết bị</p>
+            <Monitor className="w-4 h-4 text-blue-600 dark:text-blue-400" />
           </div>
-          <p className="text-2xl font-black text-slate-900 mt-2">{totalCount}</p>
-          <span className="text-[10px] text-slate-400">Đã đăng ký hệ thống</span>
+          <p className="text-2xl font-black text-slate-900 dark:text-white mt-2">{totalCount}</p>
+          <span className="text-[10px] text-slate-400 dark:text-slate-500">Đã đăng ký hệ thống</span>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-white to-emerald-50/40">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-slate-500">Hoạt động tốt</p>
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Hoạt động tốt</p>
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           </div>
-          <p className="text-2xl font-black text-emerald-700 mt-2">{goodCount}</p>
-          <span className="text-[10px] text-emerald-600 font-medium">Sẵn sàng phục vụ học</span>
+          <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-2">{goodCount}</p>
+          <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Sẵn sàng phục vụ học</span>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-white to-rose-50/40">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-slate-500">Hư hỏng / Lỗi</p>
-            <AlertTriangle className="w-4 h-4 text-rose-600" />
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Hư hỏng / Lỗi</p>
+            <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
           </div>
-          <p className="text-2xl font-black text-rose-700 mt-2">{brokenCount}</p>
-          <span className="text-[10px] text-rose-600 font-medium">Cần xử lý gấp</span>
+          <p className="text-2xl font-black text-rose-600 dark:text-rose-400 mt-2">{brokenCount}</p>
+          <span className="text-[10px] text-rose-600 dark:text-rose-400 font-medium">Cần xử lý gấp</span>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-white to-amber-50/40">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-slate-500">Đang sửa chữa</p>
-            <Wrench className="w-4 h-4 text-amber-600" />
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Đang sửa chữa</p>
+            <Wrench className="w-4 h-4 text-amber-600 dark:text-amber-400" />
           </div>
-          <p className="text-2xl font-black text-amber-700 mt-2">{repairingCount}</p>
-          <span className="text-[10px] text-amber-600 font-medium">Có phiếu đang xử lý</span>
+          <p className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-2">{repairingCount}</p>
+          <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">Có phiếu đang xử lý</span>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-white to-purple-50/40 col-span-2 sm:col-span-1">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors col-span-2 sm:col-span-1">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-slate-500">Trong kho dự phòng</p>
-            <Archive className="w-4 h-4 text-purple-600" />
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Trong kho dự phòng</p>
+            <Archive className="w-4 h-4 text-purple-600 dark:text-purple-400" />
           </div>
-          <p className="text-2xl font-black text-purple-700 mt-2">{inStorageCount}</p>
-          <span className="text-[10px] text-purple-600 font-medium">Chưa gán phòng</span>
+          <p className="text-2xl font-black text-purple-600 dark:text-purple-400 mt-2">{inStorageCount}</p>
+          <span className="text-[10px] text-purple-600 dark:text-purple-400 font-medium">Chưa gán phòng</span>
         </Card>
       </div>
 

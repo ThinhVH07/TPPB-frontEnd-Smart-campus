@@ -176,7 +176,7 @@ export function RoomsView({ onSelectRoomForInspection, onNavigateToTickets }) {
 
       {/* 2. Key Metrics Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        <Card className="p-4 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
             <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Tổng số phòng</p>
             <DoorClosed className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -185,39 +185,39 @@ export function RoomsView({ onSelectRoomForInspection, onNavigateToTickets }) {
           <span className="text-[10px] text-slate-400 dark:text-slate-500">Toàn bộ CS1</span>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-white to-emerald-50/30 dark:from-slate-800 dark:to-emerald-950/30">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
             <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Đang có lớp học</p>
             <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
           </div>
-          <p className="text-2xl font-black text-emerald-700 dark:text-emerald-400 mt-2">{inUseCount}</p>
+          <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-2">{inUseCount}</p>
           <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Theo LichPhong ca này</span>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-white to-blue-50/30 dark:from-slate-800 dark:to-blue-950/30">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
             <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Phòng sẵn sàng</p>
             <CheckCircle2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
           </div>
-          <p className="text-2xl font-black text-blue-700 dark:text-blue-400 mt-2">{readyCount}</p>
+          <p className="text-2xl font-black text-blue-600 dark:text-blue-400 mt-2">{readyCount}</p>
           <span className="text-[10px] text-blue-600 dark:text-blue-400 font-medium">Có thể tiếp nhận mượn</span>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-white to-rose-50/30 dark:from-slate-800 dark:to-rose-950/30">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors">
           <div className="flex items-center justify-between">
             <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Đang bảo trì</p>
             <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
           </div>
-          <p className="text-2xl font-black text-rose-700 dark:text-rose-400 mt-2">{maintenanceCount}</p>
+          <p className="text-2xl font-black text-rose-600 dark:text-rose-400 mt-2">{maintenanceCount}</p>
           <span className="text-[10px] text-rose-600 dark:text-rose-400 font-medium">Có phiếu báo hỏng</span>
         </Card>
 
-        <Card className="p-4 bg-gradient-to-br from-white to-indigo-50/30 dark:from-slate-800 dark:to-indigo-950/30 col-span-2 sm:col-span-1">
+        <Card className="p-4 bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-xs transition-colors col-span-2 sm:col-span-1">
           <div className="flex items-center justify-between">
             <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Tổng sức chứa</p>
             <Users className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
           </div>
-          <p className="text-2xl font-black text-indigo-700 dark:text-indigo-400 mt-2">{totalCapacity}</p>
+          <p className="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-2">{totalCapacity}</p>
           <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium">Chỗ ngồi sinh viên</span>
         </Card>
       </div>

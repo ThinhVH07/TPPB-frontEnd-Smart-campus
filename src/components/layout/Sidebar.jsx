@@ -13,14 +13,13 @@ import {
 } from 'lucide-react';
 
 export function Sidebar({ activeTab = 'overview', onSelectTab, isOpen = false, onClose }) {
-  // Navigation tabs directly backed by Backend Models & Routers
+  // Navigation tabs directly backed by Backend Models & Routers (titles shortened to <= 3 words)
   const navItems = [
-    { id: 'overview', label: 'Tổng quan Vận hành', icon: LayoutDashboard },
-    { id: 'rooms', label: 'Danh mục Phòng học', icon: DoorClosed, badge: '6 phòng' },
-    { id: 'schedule', label: 'Lịch học (LichPhong)', icon: Calendar, badge: '2 ca' },
-    { id: 'devices', label: 'Thiết bị & Báo hỏng', icon: Monitor, badge: '1 lỗi', badgeVariant: 'warning' },
-    { id: 'energy', label: 'Điện năng (DienNang)', icon: Zap },
-    { id: 'tickets', label: 'Phiếu Báo hỏng', icon: AlertTriangle, badge: '1 phiếu', badgeVariant: 'danger' }
+    { id: 'rooms', label: 'Phòng học', icon: DoorClosed },
+    { id: 'schedule', label: 'Lịch học', icon: Calendar },
+    { id: 'devices', label: 'Thiết bị', icon: Monitor, badge: '1 lỗi', badgeVariant: 'warning' },
+    { id: 'energy', label: 'Điện năng', icon: Zap },
+    { id: 'tickets', label: 'Báo cáo sự cố', icon: AlertTriangle, badge: '1 phiếu', badgeVariant: 'danger' }
   ];
 
   return (
@@ -33,11 +32,12 @@ export function Sidebar({ activeTab = 'overview', onSelectTab, isOpen = false, o
         />
       )}
 
-      <aside className={`fixed inset-y-0 left-0 z-50 lg:static lg:z-30 w-64 bg-white border-r border-slate-200/90 flex flex-col h-screen select-none shadow-2xl lg:shadow-xs transition-transform duration-300 ease-in-out shrink-0 ${
+      {/* Sidebar: sticky top-0 on desktop so it always stays with mouse scroll and above drawers */}
+      <aside className={`fixed inset-y-0 left-0 z-50 lg:sticky lg:top-0 lg:z-50 w-64 bg-white border-r border-slate-200/90 flex flex-col h-screen select-none shadow-2xl lg:shadow-xs transition-transform duration-300 ease-in-out shrink-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       }`}>
         {/* Brand Header */}
-        <div className="h-16 px-6 flex items-center justify-between border-b border-slate-100">
+        <div className="h-16 px-6 flex items-center justify-between border-b border-slate-100 shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 animate-scale-in">
               <Building2 className="w-5 h-5" />
@@ -61,7 +61,7 @@ export function Sidebar({ activeTab = 'overview', onSelectTab, isOpen = false, o
         </div>
 
         {/* Nav List */}
-        <div className="flex-1 overflow-y-auto px-4 py-5 space-y-2">
+        <div className="flex-1 overflow-y-auto px-4 py-5 space-y-2 overscroll-contain">
           <p className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
             Chức năng Quản lý
           </p>
@@ -78,8 +78,8 @@ export function Sidebar({ activeTab = 'overview', onSelectTab, isOpen = false, o
                 }}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
                   isActive
-                    ? 'bg-blue-50 text-blue-700 font-bold shadow-xs translate-x-1'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    ? 'bg-blue-50 text-blue-700 font-bold shadow-xs translate-x-1.5'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:translate-x-1'
                 }`}
               >
                 <div className="flex items-center gap-3">

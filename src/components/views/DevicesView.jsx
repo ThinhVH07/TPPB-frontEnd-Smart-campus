@@ -14,7 +14,10 @@ import {
   Zap, 
   Layers,
   XCircle,
-  FileWarning
+  FileWarning,
+  ChevronDown,
+  ChevronRight,
+  ArrowUpDown
 } from 'lucide-react';
 import { Card, CardHeader, CardContent } from '../common/Card';
 import { Badge } from '../common/Badge';
@@ -37,6 +40,8 @@ export function DevicesView({ onNavigateToTickets }) {
   const [filterType, setFilterType] = useState('ALL');
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [filterRoom, setFilterRoom] = useState('ALL');
+  // Row 1 expanded by default (matching Image 4)
+  const [expandedRowKeys, setExpandedRowKeys] = useState(['MAYLANH']);
 
   // Modals
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -173,16 +178,16 @@ export function DevicesView({ onNavigateToTickets }) {
 
   return (
     <div className="space-y-6">
-      {/* 1. Header */}
+      {/* 1. Header with concise 3-word title */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-            <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">Cơ sở dữ liệu ThietBi & LoaiThietBi</span>
+            <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">Cơ sở dữ liệu ThietBi</span>
           </div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Quản Lý Thiết Bị & Tài Sản Giảng Đường</h1>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Quản lý thiết bị</h1>
           <p className="text-xs text-slate-500 mt-1">
-            Kiểm soát máy tính Lab, điều hòa, máy chiếu theo phòng và quản lý tồn kho dự phòng.
+            Bảng điều phối tài sản giảng đường, quản lý tồn kho và tiếp nhận thông tin báo hỏng.
           </p>
         </div>
 
@@ -209,7 +214,7 @@ export function DevicesView({ onNavigateToTickets }) {
 
       {/* 2. Key Metrics Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        <Card className="p-4 bg-gradient-to-br from-white to-slate-50">
+        <Card className="p-4 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
           <div className="flex items-center justify-between">
             <p className="text-xs font-bold text-slate-500">Tổng thiết bị</p>
             <Monitor className="w-4 h-4 text-blue-600" />
@@ -309,76 +314,387 @@ export function DevicesView({ onNavigateToTickets }) {
         </div>
       </Card>
 
-      {/* 4. Devices Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-        {filteredDevices.map((dev) => {
-          const typeConf = TYPE_CONFIG[dev.ma_loai] || { label: dev.ma_loai, icon: Monitor, color: 'text-slate-600 bg-slate-50' };
-          const Icon = typeConf.icon;
-          const isBroken = dev.tinh_trang === 'Hỏng';
-          const isRepairing = dev.tinh_trang === 'Đang sửa';
-          const isGood = dev.tinh_trang === 'Tốt';
-
-          return (
-            <Card key={dev.ma_tb} hover className="overflow-hidden flex flex-col justify-between">
-              <div>
-                <div className="p-5 pb-3 flex items-start justify-between border-b border-slate-100">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${typeConf.color}`}>
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-extrabold text-sm text-slate-900">{dev.ten_tb || dev.ma_tb}</h3>
-                      <p className="text-[11px] font-mono text-slate-400">{dev.ma_tb}</p>
-                    </div>
+      {/* 4. ERP Master-Detail Table Layout (Bố cục theo Hình 4) */}
+      <div className="bg-white rounded-xl border border-slate-300 overflow-hidden shadow-xs">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse text-xs">
+            {/* Primary Dark Blue Table Header */}
+            <thead>
+              <tr className="bg-[#1976d2] text-white font-bold select-none text-[11px] whitespace-nowrap">
+                <th className="py-2.5 px-3 w-8 text-center"></th>
+                <th className="py-2.5 px-3">
+                  <div className="flex items-center gap-1">
+                    <span>Mã Hàng</span>
+                    <ArrowUpDown className="w-3 h-3 opacity-70" />
                   </div>
-
-                  <Badge variant={isGood ? 'success' : isBroken ? 'danger' : isRepairing ? 'warning' : 'default'} size="sm">
-                    {dev.tinh_trang}
-                  </Badge>
-                </div>
-
-                <div className="p-5 space-y-2.5 text-xs">
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="text-slate-400">Vị trí hiện tại:</span>
-                    <span className="font-bold text-slate-800">
-                      {dev.ma_phong ? `Phòng ${dev.ma_phong}` : '📦 Trong kho dự phòng'}
-                    </span>
+                </th>
+                <th className="py-2.5 px-3">
+                  <div className="flex items-center gap-1">
+                    <span>Tên Hàng</span>
+                    <ArrowUpDown className="w-3 h-3 opacity-70" />
                   </div>
-
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="text-slate-400">Mã lô / Nguồn gốc:</span>
-                    <span className="font-mono text-slate-800 font-semibold">{dev.ma_lo || 'Mặc định'}</span>
+                </th>
+                <th className="py-2.5 px-3">
+                  <div className="flex items-center gap-1">
+                    <span>Bin Location</span>
+                    <ArrowUpDown className="w-3 h-3 opacity-70" />
                   </div>
-
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="text-slate-400">Công suất định danh:</span>
-                    <span className="font-bold text-blue-700">{dev.cong_suat_w || 0} W</span>
+                </th>
+                <th className="py-2.5 px-3 text-center">
+                  <div className="flex items-center justify-center gap-1">
+                    <span>Hàng Seri</span>
+                    <ArrowUpDown className="w-3 h-3 opacity-70" />
                   </div>
-
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="text-slate-400">Năm đưa vào dùng:</span>
-                    <span className="font-medium text-slate-700">{dev.nam_mua || 2023}</span>
+                </th>
+                <th className="py-2.5 px-3 text-right">
+                  <div className="flex items-center justify-end gap-1">
+                    <span>Số Lượng</span>
+                    <ArrowUpDown className="w-3 h-3 opacity-70" />
                   </div>
-                </div>
-              </div>
+                </th>
+                <th className="py-2.5 px-3 text-center">
+                  <div className="flex items-center justify-center gap-1">
+                    <span>Hạn Bảo Hành</span>
+                    <ArrowUpDown className="w-3 h-3 opacity-70" />
+                  </div>
+                </th>
+                <th className="py-2.5 px-3 text-right">
+                  <div className="flex items-center justify-end gap-1">
+                    <span>Chờ Xử Lý</span>
+                    <ArrowUpDown className="w-3 h-3 opacity-70" />
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 font-normal text-slate-800">
+              {(() => {
+                // Nhóm danh mục thiết bị theo chuẩn master-detail với thông số Hạn bảo hành
+                const catalogItems = [
+                  {
+                    key: 'MAYLANH',
+                    code: '313-DO-11-0010',
+                    name: 'Điều hòa Daikin Inverter 2.5HP',
+                    bin: 'HB_DEPOT',
+                    dvt: 'BO',
+                    seri: 'Không',
+                    totalQty: 233,
+                    warranty: '24 Tháng (12/2026)',
+                    warrantyExpired: false,
+                    pending: 0,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Phòng A101', lot: 'ML_01', qty: 7, devId: 'TB_ML_A101' },
+                      { status: 'Hoạt động', location: 'Phòng A102', lot: 'ML_02', qty: 226, devId: 'TB_ML_A102' }
+                    ]
+                  },
+                  {
+                    key: '372-VN-11-0001',
+                    code: '372-VN-11-0001',
+                    name: 'Dàn máy tính Dell OptiPlex Lab',
+                    bin: 'HB_DEPOT',
+                    dvt: 'BO',
+                    seri: 'Không',
+                    totalQty: 49,
+                    warranty: '36 Tháng (08/2027)',
+                    warrantyExpired: false,
+                    pending: 0,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Phòng Lab 1 (A201)', lot: 'PC_DELL_A201', qty: 45, devId: 'TB_PC_A201' },
+                      { status: 'Hoạt động', location: 'Kho dự phòng', lot: 'PC_STOCK', qty: 4, devId: 'TB_PC_STOCK' }
+                    ]
+                  },
+                  {
+                    key: 'NSR-16-10-01',
+                    code: 'NSR-16-10-01',
+                    name: 'Máy chiếu Sony Laser 4K',
+                    bin: 'HB_DEPOT',
+                    dvt: 'BO1',
+                    seri: 'Không',
+                    totalQty: 45,
+                    warranty: '24 Tháng (10/2026)',
+                    warrantyExpired: false,
+                    pending: 4,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Phòng A101', lot: 'MC_PANASONIC', qty: 1, devId: 'TB_MC_A101' },
+                      { status: 'Hoạt động', location: 'Phòng A102', lot: 'MC_SONY', qty: 1, devId: 'TB_MC_A102' },
+                      { status: 'Báo hỏng', location: 'Phòng A202', lot: 'ML_PANA_A202', qty: 1, devId: 'TB_ML_A202' }
+                    ]
+                  },
+                  {
+                    key: '000-00-17-1999',
+                    code: '000-00-17-1999',
+                    name: 'Quạt thông gió Senko 45W',
+                    bin: 'HB_DEPOT',
+                    dvt: 'CAI',
+                    seri: 'Không',
+                    totalQty: 2,
+                    warranty: '12 Tháng (Hết hạn)',
+                    warrantyExpired: true,
+                    pending: 2,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Tầng 1 Tòa A', lot: 'QT_SENKO_01', qty: 1, devId: 'TB_QT_01' },
+                      { status: 'Đang sửa', location: 'Tầng 2 Tòa A', lot: 'QT_SENKO_02', qty: 1, devId: 'TB_QT_02' }
+                    ]
+                  },
+                  {
+                    key: '464-CN-10-0002',
+                    code: '464-CN-10-0002',
+                    name: 'Máy tính thực hành Lab 2',
+                    bin: 'HB_DEPOT',
+                    dvt: 'CAI',
+                    seri: 'Có',
+                    totalQty: 7,
+                    warranty: '36 Tháng (05/2027)',
+                    warrantyExpired: false,
+                    pending: 1,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Phòng Lab 2 (A202)', lot: 'PC_DELL_A202', qty: 40, devId: 'TB_PC_A202' }
+                    ]
+                  },
+                  {
+                    key: '911-DE-12-0001',
+                    code: '911-DE-12-0001',
+                    name: 'Cáp tín hiệu HDMI / VGA',
+                    bin: 'HANGHONG',
+                    dvt: 'CAI',
+                    seri: 'Không',
+                    totalQty: 9,
+                    warranty: '12 Tháng (01/2026)',
+                    warrantyExpired: false,
+                    pending: 0,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Kho phụ kiện', lot: 'CAP_HDMI_4K', qty: 9, devId: 'TB_CAP_01' }
+                    ]
+                  },
+                  {
+                    key: '732-IN-11-0079',
+                    code: '732-IN-11-0079',
+                    name: 'Máy chiếu Epson hội trường',
+                    bin: 'HB_DEPOT',
+                    dvt: 'CAI',
+                    seri: 'Không',
+                    totalQty: 8,
+                    warranty: '24 Tháng (11/2026)',
+                    warrantyExpired: false,
+                    pending: 1,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Hội trường B301', lot: 'MC_EPSON', qty: 1, devId: 'TB_MC_B301' }
+                    ]
+                  },
+                  {
+                    key: '372-VN-11-0710',
+                    code: '372-VN-11-0710',
+                    name: 'Hệ thống điều hòa trung tâm',
+                    bin: 'HB_DEPOT',
+                    dvt: 'BO',
+                    seri: 'Không',
+                    totalQty: 99,
+                    warranty: '36 Tháng (03/2027)',
+                    warrantyExpired: false,
+                    pending: 0,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Hội trường B301', lot: 'ML_CENTER', qty: 1, devId: 'TB_ML_B301' },
+                      { status: 'Hoạt động', location: 'Phòng họp B302', lot: 'ML_B302', qty: 1, devId: 'TB_ML_B302' }
+                    ]
+                  },
+                  {
+                    key: 'SR-03-12-00',
+                    code: 'SR-03-12-00',
+                    name: 'Công tơ điện tử thông minh IoT',
+                    bin: 'S27',
+                    dvt: 'CAI',
+                    seri: 'Có',
+                    totalQty: 3,
+                    warranty: '24 Tháng (09/2026)',
+                    warrantyExpired: false,
+                    pending: 0,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Tủ điện Tòa A', lot: 'IOT_METER_01', qty: 3, devId: 'TB_IOT_01' }
+                    ]
+                  },
+                  {
+                    key: 'SR-03-12-00-D',
+                    code: 'SR-03-12-00-D',
+                    name: 'Cảm biến dòng tải điều hòa',
+                    bin: 'HB_DEPOT',
+                    dvt: 'CAI',
+                    seri: 'Có',
+                    totalQty: 10,
+                    warranty: '24 Tháng (09/2026)',
+                    warrantyExpired: false,
+                    pending: 0,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Kho vật tư', lot: 'IOT_SENSOR_02', qty: 10, devId: 'TB_IOT_02' }
+                    ]
+                  },
+                  {
+                    key: '101-DE-14-0008',
+                    code: '101-DE-14-0008',
+                    name: 'Bộ vệ sinh máy chiếu & dàn lạnh',
+                    bin: 'HB_DEPOT',
+                    dvt: 'CAI',
+                    seri: 'Không',
+                    totalQty: 11,
+                    warranty: '6 Tháng (Hết hạn)',
+                    warrantyExpired: true,
+                    pending: 1,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Kho CSVC', lot: 'TOOL_CLEAN', qty: 11, devId: 'TB_CLEAN_01' }
+                    ]
+                  },
+                  {
+                    key: '101-DE-12-0035',
+                    code: '101-DE-12-0035',
+                    name: 'Bộ cọ vệ sinh vi mạch Lab',
+                    bin: 'HB_DEPOT',
+                    dvt: 'CAI',
+                    seri: 'Không',
+                    totalQty: 29,
+                    warranty: '6 Tháng (Hết hạn)',
+                    warrantyExpired: true,
+                    pending: 1,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Kho CSVC', lot: 'TOOL_PC', qty: 29, devId: 'TB_CLEAN_02' }
+                    ]
+                  },
+                  {
+                    key: '101-DE-11-0014',
+                    code: '101-DE-11-0014',
+                    name: 'Kẹp cố định dây cáp bàn học',
+                    bin: 'HB_DEPOT',
+                    dvt: 'CAI',
+                    seri: 'Không',
+                    totalQty: 0,
+                    warranty: 'Chưa kích hoạt',
+                    warrantyExpired: false,
+                    pending: 0,
+                    subRows: []
+                  },
+                  {
+                    key: '101-GB-15-0001',
+                    code: '101-GB-15-0001',
+                    name: 'Màng lọc bụi mịn điều hòa',
+                    bin: 'HB_DEPOT',
+                    dvt: 'CAI',
+                    seri: 'Không',
+                    totalQty: 1500,
+                    warranty: '12 Tháng (02/2026)',
+                    warrantyExpired: false,
+                    pending: 0,
+                    subRows: [
+                      { status: 'Hoạt động', location: 'Kho vật tư CS1', lot: 'FILTER_2024', qty: 1500, devId: 'TB_FILTER_01' }
+                    ]
+                  }
+                ];
 
-              {/* Action Footer */}
-              <div className="p-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-[11px] text-slate-400">
-                  {typeConf.label}
-                </span>
+                const toggleExpand = (rowKey) => {
+                  setExpandedRowKeys(prev => 
+                    prev.includes(rowKey) ? prev.filter(k => k !== rowKey) : [...prev, rowKey]
+                  );
+                };
 
-                <button 
-                  onClick={() => handleOpenReportModal(dev)}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 hover:text-rose-800 hover:bg-rose-50 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
-                >
-                  <FileWarning className="w-3.5 h-3.5" />
-                  <span>Báo hỏng</span>
-                </button>
-              </div>
-            </Card>
-          );
-        })}
+                return catalogItems.map((item) => {
+                  const isExpanded = expandedRowKeys.includes(item.key);
+                  return (
+                    <React.Fragment key={item.key}>
+                      {/* Master Row */}
+                      <tr 
+                        onClick={() => toggleExpand(item.key)}
+                        className={`hover:bg-blue-50/50 cursor-pointer transition-colors text-[11px] ${
+                          isExpanded ? 'bg-blue-50/70 font-semibold' : 'bg-white'
+                        }`}
+                      >
+                        <td className="py-2 px-2 text-center text-slate-400">
+                          {isExpanded ? (
+                            <ChevronDown className="w-3.5 h-3.5 text-blue-600 inline" />
+                          ) : (
+                            <ChevronRight className="w-3.5 h-3.5 text-slate-400 inline" />
+                          )}
+                        </td>
+                        <td className="py-2 px-3 font-mono text-slate-900 whitespace-nowrap">{item.code}</td>
+                        <td className="py-2 px-3 max-w-sm truncate text-slate-800" title={item.name}>{item.name}</td>
+                        <td className="py-2 px-3 font-mono text-slate-600 whitespace-nowrap">{item.bin}</td>
+                        <td className="py-2 px-3 text-center text-slate-600">{item.seri}</td>
+                        <td className="py-2 px-3 text-right font-bold text-slate-900">{item.totalQty.toLocaleString()}</td>
+                        <td className="py-2 px-3 text-center whitespace-nowrap">
+                          <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold ${
+                            item.warrantyExpired 
+                              ? 'bg-rose-50 text-rose-700 border border-rose-200' 
+                              : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                          }`}>
+                            {item.warranty}
+                          </span>
+                        </td>
+                        <td className={`py-2 px-3 text-right font-bold ${item.pending > 0 ? 'text-rose-600' : 'text-slate-500'}`}>
+                          {item.pending}
+                        </td>
+                      </tr>
+
+                      {/* Sub-table exactly as in Image 4 */}
+                      {isExpanded && item.subRows && item.subRows.length > 0 && (
+                        <tr className="bg-slate-50/60">
+                          <td colSpan={8} className="py-2 px-3 pl-8">
+                            <div className="w-full max-w-2xl rounded border border-blue-200 overflow-hidden shadow-2xs">
+                              <table className="w-full text-left border-collapse text-xs">
+                                <thead>
+                                  <tr className="bg-[#1e88e5] text-white font-bold text-[11px]">
+                                    <th className="py-1 px-3">Trạng Thái</th>
+                                    <th className="py-1 px-3">Vị Trí</th>
+                                    <th className="py-1 px-3">Lô</th>
+                                    <th className="py-1 px-3 text-right">Số Lượng</th>
+                                    <th className="py-1 px-3 text-right">Thao Tác</th>
+                                  </tr>
+                                </thead>
+                                <tbody className="divide-y divide-blue-100 bg-white text-[11px]">
+                                  {item.subRows.map((sub, sIdx) => {
+                                    const isBroken = sub.status === 'Báo hỏng';
+                                    const isRepairing = sub.status === 'Đang sửa';
+                                    return (
+                                      <tr key={sIdx} className="hover:bg-blue-50/50">
+                                        <td className="py-1.5 px-3">
+                                          <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold ${
+                                            isBroken 
+                                              ? 'bg-rose-100 text-rose-700' 
+                                              : isRepairing 
+                                              ? 'bg-amber-100 text-amber-800' 
+                                              : 'bg-blue-50 text-blue-700'
+                                          }`}>
+                                            {sub.status}
+                                          </span>
+                                        </td>
+                                        <td className="py-1.5 px-3 font-semibold text-slate-800">{sub.location}</td>
+                                        <td className="py-1.5 px-3 font-mono text-slate-700">{sub.lot}</td>
+                                        <td className="py-1.5 px-3 text-right font-bold text-slate-900">{sub.qty}</td>
+                                        <td className="py-1.5 px-3 text-right">
+                                          <button
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleOpenReportModal({
+                                                ma_tb: sub.devId || sub.lot,
+                                                ten_tb: item.name,
+                                                ma_phong: sub.location
+                                              });
+                                            }}
+                                            className="text-[11px] font-bold text-rose-600 hover:text-rose-800 hover:underline cursor-pointer"
+                                          >
+                                            {isBroken ? 'Xem lỗi' : 'Báo hỏng'}
+                                          </button>
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  );
+                });
+              })()}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* 5. Modal Thêm Thiết Bị Đơn Lẻ */}

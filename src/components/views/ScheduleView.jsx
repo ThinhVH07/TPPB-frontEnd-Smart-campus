@@ -24,8 +24,7 @@ import { mockCampusData } from '../../data/mockData';
 const CA_INFO = {
   1: { label: 'Ca 1 (Sáng)', time: '07:30 - 11:30', bg: 'bg-amber-50 text-amber-700 border-amber-200/60' },
   2: { label: 'Ca 2 (Chiều)', time: '13:00 - 17:00', bg: 'bg-blue-50 text-blue-700 border-blue-200/60' },
-  3: { label: 'Ca 3 (Tối)', time: '17:30 - 21:00', bg: 'bg-purple-50 text-purple-700 border-purple-200/60' },
-  4: { label: 'Ca 4 (Tự do)', time: '21:00 - 23:00', bg: 'bg-slate-50 text-slate-700 border-slate-200/60' }
+  3: { label: 'Ca 3 (Tối)', time: '17:30 - 21:00', bg: 'bg-purple-50 text-purple-700 border-purple-200/60' }
 };
 
 export function ScheduleView() {
@@ -83,6 +82,31 @@ export function ScheduleView() {
     loadData();
   }, []);
 
+  // Chuyển ngày trước / ngày tiếp theo
+  const handlePrevDay = () => {
+    const parts = (selectedDate || '').split('-');
+    const current = parts.length === 3 
+      ? new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])) 
+      : new Date();
+    current.setDate(current.getDate() - 1);
+    const y = current.getFullYear();
+    const m = String(current.getMonth() + 1).padStart(2, '0');
+    const d = String(current.getDate()).padStart(2, '0');
+    setSelectedDate(`${y}-${m}-${d}`);
+  };
+
+  const handleNextDay = () => {
+    const parts = (selectedDate || '').split('-');
+    const current = parts.length === 3 
+      ? new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])) 
+      : new Date();
+    current.setDate(current.getDate() + 1);
+    const y = current.getFullYear();
+    const m = String(current.getMonth() + 1).padStart(2, '0');
+    const d = String(current.getDate()).padStart(2, '0');
+    setSelectedDate(`${y}-${m}-${d}`);
+  };
+
   // Filter schedules by date
   const filteredSchedules = schedules.filter(s => s.ngay === selectedDate);
 
@@ -107,6 +131,19 @@ export function ScheduleView() {
     setSchedules(prev => [newSched, ...prev]);
     setIsAddScheduleModalOpen(false);
     alert('Thêm lịch phòng thành công!');
+  };
+
+  // Mở modal đặt lịch phòng khi bấm vào ô ca trống
+  const handleOpenBookingSlot = (maPhong, caNum) => {
+    setRequestForm(prev => ({
+      ...prev,
+      ma_phong: maPhong,
+      ca: caNum,
+      ngay: selectedDate,
+      so_nguoi: 30,
+      muc_dich: ''
+    }));
+    setIsRequestModalOpen(true);
   };
 
   // Gửi yêu cầu mượn
@@ -161,7 +198,7 @@ export function ScheduleView() {
             <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
             <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">Hệ thống LichPhong & YeuCauMuon</span>
           </div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Thời Khóa Biểu & Quản Lý Mượn Phòng</h1>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Lịch phòng học</h1>
           <p className="text-xs text-slate-500 mt-1">
             Điều phối ca học chính khóa, tránh xung đột lịch phòng học và xét duyệt mượn không gian campus.
           </p>
@@ -226,44 +263,73 @@ export function ScheduleView() {
           {/* Date Controller */}
           <Card className="p-4 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-blue-600" />
-              <span className="text-xs font-bold text-slate-700">Ngày hiển thị:</span>
-              <input 
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 focus:bg-white focus:outline-none"
-              />
+              <button
+                type="button"
+                onClick={handlePrevDay}
+                title="Chuyển qua lịch ngày trước đó"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl border border-slate-200 bg-white hover:bg-blue-50 hover:border-blue-400 text-slate-700 hover:text-blue-600 shadow-2xs transition-all cursor-pointer group"
+              >
+                <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                <span>Ngày trước</span>
+              </button>
+
+              <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+                <Calendar className="w-4 h-4 text-blue-600" />
+                <span className="text-xs font-bold text-slate-700">Ngày hiển thị:</span>
+                <input 
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 focus:bg-white focus:outline-none"
+                />
+              </div>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <Button 
-                size="sm" 
-                variant={selectedDate === new Date().toISOString().split('T')[0] ? 'primary' : 'outline'}
-                onClick={() => setSelectedDate(new Date().toISOString().split('T')[0])}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 pr-2 border-r border-slate-200">
+                <Button 
+                  size="sm" 
+                  variant={selectedDate === new Date().toISOString().split('T')[0] ? 'primary' : 'outline'}
+                  onClick={() => setSelectedDate(new Date().toISOString().split('T')[0])}
+                >
+                  Hôm nay
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant={selectedDate === new Date(Date.now() + 86400000).toISOString().split('T')[0] ? 'primary' : 'outline'}
+                  onClick={() => setSelectedDate(new Date(Date.now() + 86400000).toISOString().split('T')[0])}
+                >
+                  Ngày mai
+                </Button>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleNextDay}
+                title="Chuyển qua lịch ngày tiếp theo"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl border border-slate-200 bg-white hover:bg-blue-50 hover:border-blue-400 text-slate-700 hover:text-blue-600 shadow-2xs transition-all cursor-pointer group"
               >
-                Hôm nay
-              </Button>
-              <Button 
-                size="sm" 
-                variant={selectedDate === new Date(Date.now() + 86400000).toISOString().split('T')[0] ? 'primary' : 'outline'}
-                onClick={() => setSelectedDate(new Date(Date.now() + 86400000).toISOString().split('T')[0])}
-              >
-                Ngày mai
-              </Button>
+                <span>Ngày tiếp</span>
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              </button>
             </div>
           </Card>
 
           {/* Timetable Matrix Grid */}
           <Card className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[700px]">
+            <table className="w-full text-left border-collapse table-fixed min-w-[760px]">
+              <colgroup>
+                <col className="w-44" />
+                <col className="w-1/3" />
+                <col className="w-1/3" />
+                <col className="w-1/3" />
+              </colgroup>
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/70 text-[11px] font-bold text-slate-500 uppercase">
                   <th className="p-4 w-44">Phòng học</th>
-                  <th className="p-4">{CA_INFO[1].label}<br/><span className="text-[10px] lowercase text-slate-400 font-medium">{CA_INFO[1].time}</span></th>
-                  <th className="p-4">{CA_INFO[2].label}<br/><span className="text-[10px] lowercase text-slate-400 font-medium">{CA_INFO[2].time}</span></th>
-                  <th className="p-4">{CA_INFO[3].label}<br/><span className="text-[10px] lowercase text-slate-400 font-medium">{CA_INFO[3].time}</span></th>
-                  <th className="p-4">{CA_INFO[4].label}<br/><span className="text-[10px] lowercase text-slate-400 font-medium">{CA_INFO[4].time}</span></th>
+                  <th className="p-4 w-1/3">{CA_INFO[1].label}<br/><span className="text-[10px] lowercase text-slate-400 font-medium">{CA_INFO[1].time}</span></th>
+                  <th className="p-4 w-1/3">{CA_INFO[2].label}<br/><span className="text-[10px] lowercase text-slate-400 font-medium">{CA_INFO[2].time}</span></th>
+                  <th className="p-4 w-1/3">{CA_INFO[3].label}<br/><span className="text-[10px] lowercase text-slate-400 font-medium">{CA_INFO[3].time}</span></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-xs">
@@ -272,19 +338,14 @@ export function ScheduleView() {
                     <tr key={room.ma_phong} className="hover:bg-slate-50/60 transition-colors">
                       {/* Room Column */}
                       <td className="p-4 align-top font-bold text-slate-900 bg-slate-50/30">
-                        <div className="flex items-center gap-2">
-                          <span className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">
-                            {room.ma_phong}
-                          </span>
-                          <div>
-                            <p className="text-xs font-bold text-slate-900">{room.ma_phong}</p>
-                            <span className="text-[10px] text-slate-400 font-medium">{room.loai_phong}</span>
-                          </div>
+                        <div>
+                          <p className="text-xs font-bold text-slate-900">{room.ma_phong}</p>
+                          <span className="text-[10px] text-slate-400 font-medium">{room.loai_phong}</span>
                         </div>
                       </td>
 
-                      {/* Ca 1 to 4 */}
-                      {[1, 2, 3, 4].map((caNum) => {
+                      {/* Ca 1 to 3 */}
+                      {[1, 2, 3].map((caNum) => {
                         const sched = filteredSchedules.find(s => s.ma_phong === room.ma_phong && s.ca === caNum);
 
                         if (sched) {
@@ -293,32 +354,71 @@ export function ScheduleView() {
                             <td key={caNum} className="p-3 align-top">
                               <div className={`p-2.5 rounded-xl border ${
                                 isMuon ? 'bg-purple-50/70 border-purple-200 text-purple-900' : 'bg-blue-50/70 border-blue-200 text-blue-900'
-                              } space-y-1 shadow-2xs`}>
+                              } space-y-1.5 shadow-2xs`}>
                                 <div className="flex items-center justify-between">
                                   <span className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded ${
                                     isMuon ? 'bg-purple-200 text-purple-800' : 'bg-blue-200 text-blue-800'
                                   }`}>
                                     {isMuon ? 'Mượn phòng' : 'Chính khóa'}
                                   </span>
-                                  <span className="text-[10px] font-bold text-slate-500">#{sched.ma_lich}</span>
+                                  <span className="text-[10px] font-bold text-slate-400 font-mono">#{sched.ma_lich}</span>
                                 </div>
-                                <p className="font-extrabold text-xs line-clamp-2">{sched.noi_dung || sched.ten_mon_hoc}</p>
-                                {sched.giang_vien && (
-                                  <p className="text-[10px] text-slate-600">GV: {sched.giang_vien}</p>
-                                )}
-                                {sched.lop && (
-                                  <p className="text-[10px] text-slate-500">Lớp: {sched.lop}</p>
+                                
+                                <p className="font-extrabold text-xs line-clamp-2 leading-tight break-words">
+                                  {sched.noi_dung || sched.ten_mon_hoc}
+                                </p>
+
+                                {/* Hiển thị hợp lý theo yêu cầu Hình 3: Lịch học là GV & Lớp, Mượn phòng là Bên mượn & Đối tượng tham gia */}
+                                {isMuon ? (
+                                  <div className="pt-1 border-t border-purple-200/60 space-y-0.5 text-[10px] text-purple-950">
+                                    <p className="truncate">
+                                      <span className="text-slate-500 font-normal">Bên mượn: </span>
+                                      <strong className="font-bold">{sched.ben_muon || sched.giang_vien || 'Đoàn Thanh Niên'}</strong>
+                                    </p>
+                                    <p className="truncate">
+                                      <span className="text-slate-500 font-normal">Đối tượng tham gia: </span>
+                                      <strong className="font-bold">{sched.doi_tuong || sched.lop || 'Toàn trường'}</strong>
+                                    </p>
+                                  </div>
+                                ) : (
+                                  <div className="pt-1 border-t border-blue-200/60 space-y-0.5 text-[10px] text-blue-950">
+                                    {sched.giang_vien && (
+                                      <p className="truncate">
+                                        <span className="text-slate-500 font-normal">GV: </span>
+                                        <strong className="font-bold">{sched.giang_vien}</strong>
+                                      </p>
+                                    )}
+                                    {sched.lop && (
+                                      <p className="truncate">
+                                        <span className="text-slate-500 font-normal">Lớp: </span>
+                                        <strong className="font-bold">{sched.lop}</strong>
+                                      </p>
+                                    )}
+                                  </div>
                                 )}
                               </div>
                             </td>
                           );
                         }
 
+                        {/* Ô ca trống: Nhấp vào để đặt phòng theo yêu cầu Hình 3 */}
                         return (
-                          <td key={caNum} className="p-3 align-middle text-center">
-                            <span className="text-[11px] text-slate-300 font-medium italic">
-                              Trống ca
-                            </span>
+                          <td key={caNum} className="p-2.5 align-middle text-center">
+                            <button
+                              onClick={() => handleOpenBookingSlot(room.ma_phong, caNum)}
+                              title={`Bấm để đặt phòng ${room.ma_phong} (Ca ${caNum})`}
+                              className="w-full py-3 px-2 rounded-xl border border-dashed border-slate-200 hover:border-blue-400 hover:bg-blue-50/70 text-slate-400 hover:text-blue-700 transition-all flex flex-col items-center justify-center gap-1 group cursor-pointer"
+                            >
+                              <div className="flex items-center gap-1">
+                                <Plus className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <span className="text-[11px] font-bold group-hover:underline">
+                                  Trống ca
+                                </span>
+                              </div>
+                              <span className="text-[9px] text-slate-400 group-hover:text-blue-600 font-normal">
+                                + Đặt lịch ca này
+                              </span>
+                            </button>
                           </td>
                         );
                       })}
@@ -475,7 +575,6 @@ export function ScheduleView() {
                     <option value="1">Ca 1 (Sáng 07:30 - 11:30)</option>
                     <option value="2">Ca 2 (Chiều 13:00 - 17:00)</option>
                     <option value="3">Ca 3 (Tối 17:30 - 21:00)</option>
-                    <option value="4">Ca 4 (Tự do 21:00 - 23:00)</option>
                   </select>
                 </div>
               </div>

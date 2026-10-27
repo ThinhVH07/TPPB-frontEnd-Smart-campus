@@ -257,7 +257,7 @@ export const mockCampusData = {
   allSchedules: [
     { ma_lich: 1, ma_phong: 'A101', ngay: new Date().toISOString().split('T')[0], ca: 1, loai: 'HOC', noi_dung: 'Lập trình Python Nâng Cao', ten_mon_hoc: 'Lập trình Python Nâng Cao', giang_vien: 'ThS. Nguyễn Văn A', lop: 'CNTT-K15', so_nguoi: 48, trang_thai: 'Đang diễn ra' },
     { ma_lich: 2, ma_phong: 'A201', ngay: new Date().toISOString().split('T')[0], ca: 2, loai: 'HOC', noi_dung: 'Thực hành Mạng Máy Tính', ten_mon_hoc: 'Thực hành Mạng Máy Tính', giang_vien: 'TS. Trần Thị B', lop: 'KTPM-K16', so_nguoi: 42, trang_thai: 'Sắp diễn ra' },
-    { ma_lich: 3, ma_phong: 'B301', ngay: new Date(Date.now() + 86400000).toISOString().split('T')[0], ca: 1, loai: 'MUON', noi_dung: 'Hội thảo Khoa học Sinh viên 2026', ten_mon_hoc: 'Hội thảo Khoa học Sinh viên', giang_vien: 'Đoàn Thanh Niên', lop: 'Toàn trường', so_nguoi: 120, trang_thai: 'Đã xếp lịch' },
+    { ma_lich: 3, ma_phong: 'B301', ngay: new Date(Date.now() + 86400000).toISOString().split('T')[0], ca: 1, loai: 'MUON', noi_dung: 'Hội thảo Khoa học Sinh viên 2026', ten_mon_hoc: 'Hội thảo Khoa học Sinh viên', giang_vien: 'Đoàn Thanh Niên', ben_muon: 'Đoàn Thanh Niên', lop: 'Toàn trường', doi_tuong: 'Toàn trường', so_nguoi: 120, trang_thai: 'Đã xếp lịch' },
     { ma_lich: 4, ma_phong: 'A102', ngay: new Date(Date.now() + 86400000).toISOString().split('T')[0], ca: 3, loai: 'HOC', noi_dung: 'Cơ sở Dữ liệu Phân tán', ten_mon_hoc: 'Cơ sở Dữ liệu Phân tán', giang_vien: 'ThS. Lê Hoàng C', lop: 'HTTT-K15', so_nguoi: 55, trang_thai: 'Đã xếp lịch' }
   ],
 

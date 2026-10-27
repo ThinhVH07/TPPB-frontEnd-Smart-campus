@@ -16,11 +16,12 @@ import { ScheduleView } from './components/views/ScheduleView';
 import { DevicesView } from './components/views/DevicesView';
 import { EnergyView } from './components/views/EnergyView';
 import { TicketsView } from './components/views/TicketsView';
+import { RoomPlanView } from './components/views/RoomPlanView';
 import { campusApi } from './services/api';
 import { mockCampusData } from './data/mockData';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('rooms');
   const [summary, setSummary] = useState(mockCampusData.summary);
   const [rooms, setRooms] = useState(mockCampusData.floorRooms);
   const [selectedRoomId, setSelectedRoomId] = useState('A101');
@@ -120,7 +121,7 @@ export default function App() {
         />
 
         {/* Dynamic Body Content by Active Tab with Responsive Padding */}
-        <main className="flex-1 p-3.5 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-3.5 sm:p-6 lg:p-8 max-w-[1680px] w-full mx-auto">
           {activeTab === 'overview' && (
             <div className="space-y-6">
               {/* A. Live Status & Operational Context */}
@@ -176,10 +177,18 @@ export default function App() {
 
           {activeTab === 'rooms' && (
             <RoomsView 
-              onSelectRoomForInspection={(roomId) => {
-                handleSelectRoom(roomId);
-                setActiveTab('overview');
-              }}
+              onNavigateToTickets={() => setActiveTab('tickets')}
+            />
+          )}
+
+          {activeTab === 'room-plan' && (
+            <RoomPlanView 
+              roomId={selectedRoomId}
+              rooms={rooms}
+              roomDetail={selectedRoomDetail}
+              onSelectRoom={(rId) => handleSelectRoom(rId)}
+              onBack={() => setActiveTab('rooms')}
+              onNavigateToTickets={() => setActiveTab('tickets')}
             />
           )}
 
